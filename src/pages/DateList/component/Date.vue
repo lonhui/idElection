@@ -81,6 +81,7 @@ export default {
 .Date_y{
     width: 3.25rem;
     height: 0.67rem;
+    margin: 0 auto;
     background-color: #f5a623;
     border-radius: 0.08rem;
     margin-bottom: 0.15rem;
@@ -146,6 +147,7 @@ export default {
 .Date_N{
     width: 3.25rem;
     height: 0.67rem;
+    margin: 0 auto;
     background-color: #eeeeee;
     border-radius: 0.08rem;
     margin-bottom: 0.15rem;

@@ -24,6 +24,8 @@ export default {
         }
     },
     mounted(){
+        console.log('设备')
+        console.log(navigator.userAgent)
         this.getUid()
     },
     components:{
@@ -107,6 +109,9 @@ export default {
      color: #fff;
      text-align: center;
      border-radius: 1rem;
+     -moz-box-shadow:2px 2px 3px #333333; 
+     -webkit-box-shadow:2px 2px 3px #333333; 
+     box-shadow:2px 2px 3px #333333;
  }
  .rule{
      width: 1.42rem;
@@ -120,6 +125,9 @@ export default {
      margin-top: 0.16rem;
      padding-left: 0.08rem;
      padding-right: 0.08rem;
+     -moz-box-shadow:2px 2px 3px #333333; 
+     -webkit-box-shadow:2px 2px 3px #333333; 
+     box-shadow:2px 2px 3px #333333;
  }
  .eventDate{
      font-size: 0.22rem;

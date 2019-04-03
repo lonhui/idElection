@@ -126,6 +126,11 @@ export default {
             {headers:{'Content-Type':'application/json'}})
             .then(res => {
                 if(res.data.code === 0){
+                    res.data.data.commentList.map((item)=>{
+                        let date = new Date(item.createTime)+''
+                        let dateArr = date.split(' ')
+                        item.commentTime = dateArr[2]+' '+dateArr[1]+' '+dateArr[3]+' | '+dateArr[4]
+                    })
                     this.commentList = this.commentList.concat(res.data.data.commentList)
                     this.count = res.data.data.count
                 }
@@ -199,7 +204,7 @@ export default {
 }
 
 .comment_text{
-    width: 2.9rem;
+    width: 90%;
     font-size: 0.1rem;
     line-height: 0.19rem;
     color: rgba(0, 0, 0, 0.5);

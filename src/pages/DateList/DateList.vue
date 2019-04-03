@@ -172,8 +172,7 @@ export default {
     background-repeat:no-repeat;
 }
 .center{
-    padding-left: 0.17rem;
-    padding-right: 0.17rem;
+    width: 100%;
     position: absolute;
     top:2.2rem;
 }

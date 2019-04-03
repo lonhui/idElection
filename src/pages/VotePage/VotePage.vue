@@ -1,8 +1,8 @@
 <template>
-    <div id="VotePage">
+    <div id="VotePage" @scroll="scroll">
         <div class="header">
             <div class="topic">
-                <p class="date">10 April 2019</p>
+                <p class="date">{{dateTime}}</p>
                 <div class="topic_text">
                     <p>{{this.topic}}</p>
                 </div>
@@ -28,10 +28,12 @@
 
         <!-- 评论 -->
         <div class="footer">
-            <img class="expression" src="../../assets/img_smiley@3x.png" @click="expression" alt="表情">
-            <input type="text" placeholder='Apa pendapat kamu?' v-on:keyup.enter='doComment' v-model="commentText" @focus='getFocus'>
-            <img class="share" src="../../assets/ico_share_on@3x.png" @click="share" alt="分享">
-            <img class="commentList" src="../../assets/ic_commentbar@3x.png" @click="commentList" alt="评论">
+            <div class="footer_centent">
+                <img class="expression" src="../../assets/img_smiley@3x.png" @click="expression" alt="表情">
+                <input type="text" placeholder='Apa pendapat kamu?' v-on:keyup.enter='doComment' v-model="commentText" @focus='getFocus'>
+                <img class="share" src="../../assets/ico_share_on@3x.png" @click="share" alt="分享">
+                <img class="commentList" src="../../assets/ic_commentbar@3x.png" @click="commentList" alt="评论">
+            </div>
         </div>
         <!-- 表情插件 -->
         <VEmojiPicker :pack="pack" @select="selectEmoji" :showCategory ="false" v-show='emojiShow'/>
@@ -53,6 +55,7 @@ import Loading from '@/components/Loading'
 export default {
     data(){
         return{
+            dateTime:null,
             dateId:null,
             commentShow:false,
             commentText:'',
@@ -92,14 +95,14 @@ export default {
 
         console.log(this.$route.params.data)
         if(this.$route.params.data){
-            // if(this.$route.params.data.voteAvatarNum){
-                this.vote1NumberPer = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer.toFixed(2):0
-                this.vote2NumberPer = this.$route.params.data.vote2NumberPer?this.$route.params.data.vote2NumberPer.toFixed(2):0
-                this.voteNumber = this.$route.params.data.voteAvatarNum?this.$route.params.data.voteAvatarNum:0
+            this.vote1NumberPer = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer.toFixed(2):0
+            this.vote2NumberPer = this.$route.params.data.vote2NumberPer?this.$route.params.data.vote2NumberPer.toFixed(2):0
+            this.voteNumber = this.$route.params.data.voteAvatarNum?this.$route.params.data.voteAvatarNum:0
 
-                this.redCss.height = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer * 100+'%':'0%'
-                this.buleCss.height = this.$route.params.data.vote2NumberPer?this.$route.params.data.vote2NumberPer * 100+'%':'0%'
-            // }
+            this.redCss.height = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer * 100+'%':'0%'
+            this.buleCss.height = this.$route.params.data.vote2NumberPer?this.$route.params.data.vote2NumberPer * 100+'%':'0%'
+        }else{  
+            this.$router.push('/DateList')
         }
     },
     directives: {
@@ -112,6 +115,10 @@ export default {
         }
     },
     methods:{
+        scroll(event) {
+             this.pos = event.target.scrollTop
+             console.log('scroll', event.target.scrollTop)
+        },
         selectEmoji(emoji) {
             console.log(emoji.emoji)
             this.commentText =this.commentText + emoji.emoji
@@ -119,10 +126,10 @@ export default {
         shareSucceed(){this.closeShare()},
         share(){
             let content = ''
-            content='Share! Test Share Test Share Test Share Test Share Test Share Test Share Test Share!'
+            content='Aku sudah vote untuk paslon pilihanku di event "Polling Pilpres" Caping. Siapa paslon pilihanmu? Yuk, vote di Caping sekarang!'
             let title = content
             let pic = null
-            var url ='http://bit.ly/CapingRun'
+            var url ='https://app.appsflyer.com/com.engloryintertech.caping?pid=Download'
             CapingJs.share(title,content,url,pic)
         },
         commentList(){
@@ -197,35 +204,49 @@ export default {
                     this.topic = 'Paslon Mana Yang Visi & Misinya Keren?'
                     this.vote1Img = require('../../assets/img_paslon1@2x.png')
                     this.vote2Img = require('../../assets/img_paslon2@2x.png')
+                    this.dateTime = '10 April 2019'
+                    document.getElementsByTagName("title")[0].innerText = 'Polling Hari 01';
                     break;
                 case 2:
                     this.topic = 'Capres Mana Yang Menurutmu Lebih Tegas?'
                     this.vote1Img = require('../../assets/img_polingpilpres_ui_jokowi@2x.png')
                     this.vote2Img = require('../../assets/img_polingpilpres_ui_prabowo@2x.png')
+                    document.getElementsByTagName("title")[0].innerText = 'Polling Hari 02';
+                    this.dateTime = '11 April 2019'
                 case 3:
                     this.topic = 'Tugas Wapres adalah menjalankan roda koordinasi dan komunikasi antara lembaga-lembaga di pemerintahan. Menurutmu, Cawapres Mana Yang Lebih Bisa Menjalankan Tugas Tersebut?'
                     this.vote1Img = require('../../assets/img_polingpilpres_ui_amin@2x.png')
                     this.vote2Img = require('../../assets/img_polingpilpres_ui_sandi@2x.png')
+                    document.getElementsByTagName("title")[0].innerText = 'Polling Hari 03';
+                    this.dateTime = '12 April 2019'
                     break;
                 case 4:
                     this.topic = 'Paslon Mana Yang Menurutmu Paling Dibutuhkan Rakyat Indonesia Saat ini?'
                     this.vote1Img = require('../../assets/img_paslon1@2x.png')
                     this.vote2Img = require('../../assets/img_paslon2@2x.png')
+                    document.getElementsByTagName("title")[0].innerText = 'Polling Hari 04';
+                    this.dateTime = '13 April 2019'
                     break;
                 case 5:
                     this.topic = 'Pendukung Mana Yang Lebih Kreatif Dalam Mendukung Paslonnya?'
                     this.vote1Img = require('../../assets/img_paslon1@2x.png')
                     this.vote2Img = require('../../assets/img_paslon2@2x.png')
+                    document.getElementsByTagName("title")[0].innerText = 'Polling Hari 05';
+                    this.dateTime = '14 April 2019'
                     break;
                 case 6:
                     this.topic = 'Capres Mana Yang Menurutmu Paling Nasionalis dan Merakyat?'
                     this.vote1Img = require('../../assets/img_polingpilpres_ui_jokowi@2x.png')
                     this.vote2Img = require('../../assets/img_polingpilpres_ui_prabowo@2x.png')
+                    document.getElementsByTagName("title")[0].innerText = 'Polling Hari 06';
+                    this.dateTime = '15 April 2019'
                     break;
                 case 7:
                     this.topic = 'Siapa Paslon Yang Menurutmu Paling Pantas Memimpin Indonesia Di Periode 2019-2024?'
                     this.vote1Img = require('../../assets/img_paslon1@2x.png')
                     this.vote2Img = require('../../assets/img_paslon2@2x.png')
+                    document.getElementsByTagName("title")[0].innerText = 'Polling Hari 07';
+                    this.dateTime = '16 April 2019'
                     break;
             }
             console.log(
@@ -251,7 +272,8 @@ export default {
     width: 94%;
     margin: 0 auto;
     background-color: #fff;
-    border-radius: 0.06rem
+    border-radius: 0.06rem;
+    -moz-box-shadow:2px 2px 5px #333333; -webkit-box-shadow:2px 2px 5px #333333; box-shadow:2px 2px 5px #333333;
 }
 .date{
     font-size: 0.17rem;
@@ -336,24 +358,31 @@ export default {
 .footer{
     height: 0.5rem;
     width: 100%;
+    margin: 0 auto;
     background: #fff;
     margin-bottom: 0;
     border-top: 0.005rem #f2f2f2 solid;
     border-bottom: 0.005rem #f2f2f2 solid;
+    display: flex;
+    align-items: center;
+    -moz-box-shadow:2px 2px 5px #333333; -webkit-box-shadow:2px 2px 5px #333333; box-shadow:2px 2px 5px #333333;
+}
+.footer_centent{
+    width: 95%;
+    margin: 0 auto;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 .expression,.share,.commentList{
-    width: 0.28rem;
-    margin-top: 0.1rem;
-    float: left;
+    width: 0.3rem;
+    height: 0.3rem;
 }
-.expression{margin-left: 0.1rem}
-.share{margin-left: 0.1rem}
-.commentList{margin-left: 0.1rem}
 input{
     height: 0.28rem;
     width: 2rem;
-    margin-top: 0.08rem;
-    margin-left: 0.1rem;
     border-radius: 0.14rem;
     background-color: #f2f2f2;
     padding-left: 0.1rem;

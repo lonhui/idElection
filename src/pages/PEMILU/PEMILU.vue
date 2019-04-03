@@ -28,11 +28,14 @@
             </div>
         </div>
 
+        <!-- 表情，评论，分享，展开评论列表 -->
         <div class="footer">
-            <img class="expression" src="../../assets/img_smiley@3x.png" @click="expression" alt="表情">
-            <input type="text" placeholder='Apa pendapat kamu?' v-on:keyup.enter='doComment' v-model="commentText" @focus='getFocus'>
-            <img class="share" src="../../assets/ico_share_on@3x.png" @click="share" alt="分享">
-            <img class="commentList" src="../../assets/ic_commentbar@3x.png" @click="commentList" alt="评论">
+            <div class="footer_centent">
+                <img class="expression" src="../../assets/img_smiley@3x.png" @click="expression" alt="表情">
+                <input type="text" placeholder='Apa pendapat kamu?' v-on:keyup.enter='doComment' v-model="commentText" @focus='getFocus'>
+                <img class="share" src="../../assets/ico_share_on@3x.png" @click="share" alt="分享">
+                <img class="commentList" src="../../assets/ic_commentbar@3x.png" @click="commentList" alt="评论">
+            </div>
         </div>
 
         <!-- 表情插件 -->
@@ -88,10 +91,10 @@ export default {
         // 分享
         share(){
             let content = ''
-            content='Share! Test Share Test Share Test Share Test Share Test Share Test Share Test Share!'
+            content='Aku sudah vote untuk paslon pilihanku di event "Polling Pilpres" Caping. Siapa paslon pilihanmu? Yuk, vote di Caping sekarang!'
             let title = content
             let pic = null
-            var url ='http://bit.ly/CapingRun'
+            var url ='https://app.appsflyer.com/com.engloryintertech.caping?pid=Download'
             CapingJs.share(title,content,url,pic)
         },
         // 展开评论
@@ -144,12 +147,15 @@ export default {
     height: 4.41rem;
 }
 .box,.hand,.giftBox{
-    width: 3.4rem;
+    width: 95%;
     height: 1.85rem;
     margin: 0 auto;
     border-radius: 0.05rem;
     background-color: #fff;
     margin-bottom: 0.1rem;
+    -moz-box-shadow:2px 2px 2px #333333; 
+    -webkit-box-shadow:2px 2px 2px #333333; 
+    box-shadow:2px 2px 2px #333333;
 }
 .left{
     height: 100%;
@@ -192,18 +198,30 @@ export default {
 .footer{
     height: 0.5rem;
     width: 100%;
-    background-color: #fff;
+    margin: 0 auto;
+    background: #fff;
+    margin-bottom: 0;
     border-top: 0.005rem #f2f2f2 solid;
     border-bottom: 0.005rem #f2f2f2 solid;
+    display: flex;
+    align-items: center;
+    -moz-box-shadow:2px 2px 5px #333333; 
+    -webkit-box-shadow:2px 2px 5px #333333; 
+    box-shadow:2px 2px 5px #333333;
+}
+.footer_centent{
+    width: 95%;
+    margin: 0 auto;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 .expression,.share,.commentList{
-    width: 0.28rem;
-    margin-top: 0.1rem;
-    float: left;
+    width: 0.3rem;
+    height: 0.3rem;
 }
-.expression{margin-left: 0.1rem}
-.share{margin-left: 0.1rem}
-.commentList{margin-left: 0.1rem}
 input{
     height: 0.28rem;
     width: 2rem;
