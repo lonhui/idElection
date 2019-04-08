@@ -38,7 +38,7 @@
         <!-- 表情插件 -->
         <VEmojiPicker :pack="pack" @select="selectEmoji" :showCategory ="false" v-show='emojiShow'/>
         <!-- 评论列表 -->
-        <v-comment v-show="commentShow" :dateId='dateId' :timeStatus='this.$route.params.data.timeStatus' @on-open='open'/>
+        <v-comment ref="mychild" v-show="commentShow" :dateId='dateId' :timeStatus='this.$route.params.data?(this.$route.params.data.timeStatus?this.$route.params.data.timeStatus:this.$router.push("/DateList")):this.$router.push("/DateList")' @on-open='open'/>
         <v-notRepeatVote v-if='NotVoteShow' @on-close='closeNotVote'/>
         <v-Loading v-show="loadingShow"/>
         <v-timeOut v-if="tiemOut" @on-close='closeTimeOut'/>
@@ -74,7 +74,7 @@ export default {
             pack: packData,
             emojiShow:false,
             loadingShow:false,//加载中
-            tiemOut:false//超出时间段
+            tiemOut:false,//超出时间段
         }
     },
     created(){
@@ -88,6 +88,7 @@ export default {
         VEmojiPicker
     },
     mounted(){
+        
         document.getElementById("EmojiPicker").style.width='100%'
         document.getElementsByClassName("container-search")[0].style.height=0
         document.getElementById("Emojis").style.backgroundColor="#f0f0f0"
@@ -95,8 +96,6 @@ export default {
             this.dateId = getCookie('dateId')
         }
         this.topicAndImg(this.dateId)
-        console.log("this.$route.params.data")
-        console.log(this.$route.params.data)
         if(this.$route.params.data){
             this.vote1NumberPer = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer.toFixed(2):0
             this.vote2NumberPer = this.$route.params.data.vote2NumberPer?this.$route.params.data.vote2NumberPer.toFixed(2):0
@@ -203,6 +202,8 @@ export default {
                         if(res.data.code===0){
                             this.commentText = ''
                             this.emojiShow = false
+                            
+                            this.$refs.mychild.childClick();
                         }
                     })
                     .catch(error => {

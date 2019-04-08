@@ -60,6 +60,11 @@ export default {
         this.getCommentList()
     },
     methods:{
+        childClick() {
+            if(this.pageNo === 1 ){
+                this.getCommentList()
+            }
+        },
         // 点赞、踩（评论id,赞或踩）赞1，踩0
         awesome(commentId,likeComment){
             if(this.timeStatus === 1){
