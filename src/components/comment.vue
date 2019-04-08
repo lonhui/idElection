@@ -43,7 +43,7 @@
 import {getCookie} from '../util/Cookie'
 
 export default {
-    props:['dateId'],
+    props:['dateId','timeStatus'],
     data(){
         return{
             loagdingShow:false,
@@ -60,59 +60,61 @@ export default {
         this.getCommentList()
     },
     methods:{
-        stepOn(){
-            alert('踩')
-        },
+        // 点赞、踩（评论id,赞或踩）赞1，踩0
         awesome(commentId,likeComment){
-            this.$axios.post(process.env.API_ROOT+'/vote/doCommentLikeOrDislike',
-            {
-              uid:Number(getCookie('uid')),//用户id
-              commentId:commentId,
-              likeComment:likeComment
-            },
-            {headers:{'Content-Type':'application/json'}})
-            .then(res => {
-                if(res.data.code === 0){
-                   this.commentList.map((item)=>{
-                       if(item.id === commentId){
-                           if(item.likeComment === likeComment){
-                                // switch(item.likeComment){
-                                //     case 0: --item.dislikeCount;break;
-                                //     case 1: --item.likeCount;break;
-                                // }
-                                item.likeComment = -1
-                           }else{
-                            //    if(likeComment===0){
-                            //        switch(item.likeComment){
-                            //             case -1: item.dislikeCount += 1
-                            //                     break
-                            //             case 0: item.dislikeCount -= 1
-                            //                     break
-                            //             case 1: item.likeCount -= 1
-                            //                     item.dislikeCount += 1
-                            //                     break
-                            //         }
-                            //    }else{
-                            //        switch(item.likeComment===1){
-                            //             case -1: item.likeCount += 1
-                            //                     break
-                            //             case 0: item.dislikeCount -= 1
-                            //                     item.likeCount += 1
-                            //                     break
-                            //             case 1: item.likeCount -= 1
-                            //                     break
-                            //         }
-                            //    }
-                               item.likeComment = likeComment
-                           }
-                       }
-                   })
-                }
-                console.log(res)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            if(this.timeStatus === 1){
+                this.$axios.post(process.env.API_ROOT+'/vote/doCommentLikeOrDislike',
+                {
+                uid:Number(getCookie('uid')),//用户id
+                commentId:commentId,
+                likeComment:likeComment
+                },
+                {headers:{'Content-Type':'application/json'}})
+                .then(res => {
+                    if(res.data.code === 0){
+                    this.commentList.map((item)=>{
+                        if(item.id === commentId){
+                            if(item.likeComment === likeComment){
+                                    switch(item.likeComment){
+                                        case 0: --item.dislikeCount;break;
+                                        case 1: --item.likeCount;break;
+                                    }
+                                    item.likeComment = -1
+                            }else{
+                                if(likeComment===0){
+                                    switch(item.likeComment){
+                                            case -1: item.dislikeCount += 1
+                                                    break
+                                            case 0: item.dislikeCount -= 1
+                                                    break
+                                            case 1: item.likeCount -= 1
+                                                    item.dislikeCount += 1
+                                                    break
+                                        }
+                                }else{
+                                    switch(item.likeComment){
+                                            case -1: item.likeCount += 1
+                                                    break
+                                            case 0: item.dislikeCount -= 1
+                                                    item.likeCount += 1
+                                                    break
+                                            case 1: item.likeCount -= 1
+                                                    break
+                                        }
+                                }
+                                item.likeComment = likeComment
+                            }
+                        }
+                    })
+                    }
+                    console.log(res)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }else{
+                this.$emit('on-open')
+            }
         },
         more(){
             this.loagdingShow = true

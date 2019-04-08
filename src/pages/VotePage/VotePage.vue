@@ -38,9 +38,10 @@
         <!-- 表情插件 -->
         <VEmojiPicker :pack="pack" @select="selectEmoji" :showCategory ="false" v-show='emojiShow'/>
         <!-- 评论列表 -->
-        <v-comment v-if="commentShow" :dateId='dateId'/>
+        <v-comment v-show="commentShow" :dateId='dateId' :timeStatus='this.$route.params.data.timeStatus' @on-open='open'/>
         <v-notRepeatVote v-if='NotVoteShow' @on-close='closeNotVote'/>
         <v-Loading v-show="loadingShow"/>
+        <v-timeOut v-if="tiemOut" @on-close='closeTimeOut'/>
     </div>
 </template>
 
@@ -50,7 +51,8 @@ import comment from '@/components/comment'
 import {getCookie} from '@/util/Cookie'
 import VEmojiPicker from 'v-emoji-picker';
 import packData from 'v-emoji-picker/data/emojis.json';
-import Loading from '@/components/Loading'
+import Loading from '@/components/Loading';
+import timeOut from '@/components/timeOut'
 
 export default {
     data(){
@@ -71,7 +73,8 @@ export default {
             vote2Img :null,//候选人2
             pack: packData,
             emojiShow:false,
-            loadingShow:false
+            loadingShow:false,//加载中
+            tiemOut:false//超出时间段
         }
     },
     created(){
@@ -81,10 +84,10 @@ export default {
         'v-notRepeatVote':notRepeatVote,
         'v-comment':comment,
         'v-Loading':Loading,
+        'v-timeOut':timeOut,
         VEmojiPicker
     },
     mounted(){
-        
         document.getElementById("EmojiPicker").style.width='100%'
         document.getElementsByClassName("container-search")[0].style.height=0
         document.getElementById("Emojis").style.backgroundColor="#f0f0f0"
@@ -92,7 +95,7 @@ export default {
             this.dateId = getCookie('dateId')
         }
         this.topicAndImg(this.dateId)
-
+        console.log("this.$route.params.data")
         console.log(this.$route.params.data)
         if(this.$route.params.data){
             this.vote1NumberPer = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer.toFixed(2):0
@@ -133,43 +136,51 @@ export default {
             CapingJs.share(title,content,url,pic)
         },
         commentList(){
-            // alert('展开评论')
             this.commentShow = !this.commentShow
         },
         expression(){
-            // alert('表情')
             this.emojiShow = !this.emojiShow
+        },
+        open(){
+            this.tiemOut = true
         },
         closeNotVote(){
             this.NotVoteShow=false
         },
+        closeTimeOut(){
+            this.tiemOut = false
+        },
         // 投票
         select(id){
-            this.loadingShow = true
-            this.$axios.post(process.env.API_ROOT+'/vote/doVote',
-            {
-              uid:Number(getCookie('uid')),//用户id
-              voteId:Number(this.dateId),//日期id
-              avatarNum:id//后选人id  
-            },
-            {headers:{'Content-Type':'application/json'}})
-            .then(res => {
-                console.log(res)
-                if(res.data.code===0){
-                    console.log(res.data.data)
-                    this.vote1NumberPer = res.data.data.vote1NumberPer.toFixed(2)
-                    this.vote2NumberPer = res.data.data.vote2NumberPer.toFixed(2)
+            if(this.$route.params.data.timeStatus === 1){
+                this.loadingShow = true
+                this.$axios.post(process.env.API_ROOT+'/vote/doVote',
+                {
+                    uid:Number(getCookie('uid')),//用户id
+                    voteId:Number(this.dateId),//日期id
+                    avatarNum:id//后选人id  
+                },
+                {headers:{'Content-Type':'application/json'}})
+                .then(res => {
+                    console.log(res)
+                    if(res.data.code===0){
+                        console.log(res.data.data)
+                        this.vote1NumberPer = res.data.data.vote1NumberPer.toFixed(2)
+                        this.vote2NumberPer = res.data.data.vote2NumberPer.toFixed(2)
 
-                    this.redCss.height = res.data.data.vote1NumberPer * 100+'%'
-                    this.buleCss.height = res.data.data.vote2NumberPer * 100+'%'
-                }else if(res.data.code===1003){
-                    this.NotVoteShow = true
-                }
-                 this.loadingShow = false
-            })
-            .catch(error => {
-                console.log(error)
-            })
+                        this.redCss.height = res.data.data.vote1NumberPer * 100+'%'
+                        this.buleCss.height = res.data.data.vote2NumberPer * 100+'%'
+                    }else if(res.data.code===1003){
+                        this.NotVoteShow = true
+                    }
+                    this.loadingShow = false
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }else{
+                this.tiemOut = true
+            }
         },
         // input获取焦点事件
         getFocus(){
@@ -177,26 +188,32 @@ export default {
         },
         // 评论  回车键触发
         doComment(){
+            
             if(this.commentText && this.commentText.length>0 && this.commentText != ''){
-                 this.$axios.post(process.env.API_ROOT+'/vote/doComment',
-                {
-                uid:Number(getCookie('uid')),//用户id
-                voteId:Number(this.dateId),//日期id
-                content:this.commentText
-                },
-                {headers:{'Content-Type':'application/json'}})
-                .then(res => {
-                    console.log(res.data)
-                    if(res.data.code===0){
-                        this.commentText = ''
-                        this.emojiShow = false
-                    }
-                })
-                .catch(error => {
-                    console.log(error.data)
-                })
+                if(this.$route.params.data.timeStatus === 1){
+                     this.$axios.post(process.env.API_ROOT+'/vote/doComment',
+                    {
+                        uid:Number(getCookie('uid')),//用户id
+                        voteId:Number(this.dateId),//日期id
+                        content:this.commentText
+                    },
+                    {headers:{'Content-Type':'application/json'}})
+                    .then(res => {
+                        console.log(res.data)
+                        if(res.data.code===0){
+                            this.commentText = ''
+                            this.emojiShow = false
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error.data)
+                    })
+                }else{
+                    this.tiemOut = true
+                }
             }
         },
+        // 候选人与题目
         topicAndImg(dateId){
             console.log(dateId)
             switch(Number(dateId)){

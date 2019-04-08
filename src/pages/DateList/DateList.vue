@@ -135,11 +135,7 @@ export default {
                                     this.data[j].voteStatus= 0 
                                 }
                                 //同步时间状态
-                                if(voteInfos[i].canSHow === 1){
-                                    this.data[j].timeStatus = 1
-                                }else{
-                                    this.data[j].timeStatus = 0
-                                }
+                                this.data[j].timeStatus = voteInfos[i].canSHow 
                                 // 
                                 if(voteInfos[i].vote1NumberPer){this.data[j].vote1NumberPer=voteInfos[i].vote1NumberPer}
                                 if(voteInfos[i].vote2NumberPer){this.data[j].vote2NumberPer=voteInfos[i].vote2NumberPer}

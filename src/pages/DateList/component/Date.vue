@@ -1,7 +1,7 @@
 <template>
     <div id="Date">
         <!-- 已经开始投票的组件 -->
-        <div :class="{'Date':data.voteStatus!==2,'Date_y':data.voteStatus===2,}" v-if="data.timeStatus===1">
+        <div :class="{'Date':data.voteStatus!==2,'Date_y':data.voteStatus===2,}" v-if="data.timeStatus!=0">
             <div class="top">
                 <p>{{data.date}}</p>
             </div>
@@ -42,6 +42,9 @@ export default {
         return{
 
         }
+    },
+    mounted(){
+        console.log(this.data)
     },
     methods:{
         gotoVote(id){
