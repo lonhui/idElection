@@ -3,7 +3,7 @@
     <div id="timeOut" @touchmove.prevent>
         <div class="img" @click="close">
             <img src="../assets/img_oops@2x(1).png" alt="loginImg">
-            <div class="text">voting,komentar,fungsi likes hanya dapat berfungsi pada saat hari voting berlangsung</div>
+            <div class="text">komentar gagal !</div>
         </div>
     </div>
 </template>
@@ -44,5 +44,6 @@ export default {
     font-size: 0.16rem;
     position: absolute;
     top:0.5rem;
+    left: 0.3rem;
 }
 </style>

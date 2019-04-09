@@ -76,43 +76,42 @@ export default {
                 },
                 {headers:{'Content-Type':'application/json'}})
                 .then(res => {
-                    if(res.data.code === 0){
-                    this.commentList.map((item)=>{
+                    if(res && res.data.code === 0){
+                    this.commentList.map(item => {
                         if(item.id === commentId){
-                            if(item.likeComment === likeComment){
-                                    switch(item.likeComment){
-                                        case 0: --item.dislikeCount;break;
-                                        case 1: --item.likeCount;break;
-                                    }
-                                    item.likeComment = -1
-                            }else{
-                                if(likeComment===0){
-                                    switch(item.likeComment){
-                                            case -1: item.dislikeCount += 1
-                                                    break
-                                            case 0: item.dislikeCount -= 1
-                                                    break
-                                            case 1: item.likeCount -= 1
-                                                    item.dislikeCount += 1
-                                                    break
+                                if(item.likeComment === likeComment){
+                                        switch(item.likeComment){
+                                            case 0: --item.dislikeCount;break;
+                                            case 1: --item.likeCount;break;
                                         }
+                                        item.likeComment = -1
                                 }else{
-                                    switch(item.likeComment){
-                                            case -1: item.likeCount += 1
-                                                    break
-                                            case 0: item.dislikeCount -= 1
-                                                    item.likeCount += 1
-                                                    break
-                                            case 1: item.likeCount -= 1
-                                                    break
-                                        }
+                                    if(likeComment === 0){
+                                        switch(item.likeComment){
+                                                case -1: item.dislikeCount += 1
+                                                        break
+                                                case 0: item.dislikeCount -= 1
+                                                        break
+                                                case 1: item.likeCount -= 1
+                                                        item.dislikeCount += 1
+                                                        break
+                                            }
+                                    }else{
+                                        switch(item.likeComment){
+                                                case -1: item.likeCount += 1
+                                                        break
+                                                case 0: item.dislikeCount -= 1
+                                                        item.likeCount += 1
+                                                        break
+                                                case 1: item.likeCount -= 1
+                                                        break
+                                            }
+                                    }
+                                    item.likeComment = likeComment
                                 }
-                                item.likeComment = likeComment
                             }
-                        }
-                    })
+                        })
                     }
-                    console.log(res)
                 })
                 .catch(error => {
                     console.log(error)

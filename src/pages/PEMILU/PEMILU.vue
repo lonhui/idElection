@@ -41,7 +41,8 @@
         <!-- 表情插件 -->
         <VEmojiPicker :pack="pack" @select="selectEmoji" :showCategory ="false" v-show='emojiShow'/>
         <!-- 评论列表 -->
-        <v-comment v-if="commentShow" :dateId='dateId' :timeStatus = '1'/>
+        <v-comment ref="mychild" v-if="commentShow" :dateId='dateId' :timeStatus = '1'/>
+        <v-commentError v-if="commentErrorShow" @on-close='commentErrorShow = flase'/>
         <v-Loading v-show="loadingShow"/>
     </div>
 </template>
@@ -52,6 +53,7 @@ import {getCookie} from '@/util/Cookie'
 import VEmojiPicker from 'v-emoji-picker';
 import packData from 'v-emoji-picker/data/emojis.json';
 import Loading from '@/components/Loading'
+import commentError from '@/components/commentError'
 
 export default {
     data(){
@@ -60,7 +62,8 @@ export default {
             commentText:'',
              pack: packData,
             emojiShow:false,
-            loadingShow:false
+            loadingShow:false,
+            commentErrorShow:false
         }
     },
     created(){
@@ -78,6 +81,7 @@ export default {
     components:{
         'v-comment':comment,
         'v-Loading':Loading,
+        'v-commentError':commentError,
         VEmojiPicker
     },
      methods:{
@@ -122,10 +126,15 @@ export default {
                 },
                 {headers:{'Content-Type':'application/json'}})
                 .then(res => {
-                    console.log(res.data)
-                    if(res.data.code===0){
+                    if(res && res.data.code === 0){
                         this.commentText = ''
                         this.emojiShow = false
+                        this.$refs.mychild.childClick();
+                        if(!this.commentShow){
+                            this.commentShow = true
+                        }
+                    }else{
+                        this.commentErrorShow = true
                     }
                     this.loadingShow = false
                 })

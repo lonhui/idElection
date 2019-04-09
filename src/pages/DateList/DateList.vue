@@ -122,8 +122,7 @@ export default {
             {id:uid},//用户id
             {headers:{'Content-Type':'application/json'}})
             .then(res => {
-                console.log(res)
-                if(res.data.code==0){
+                if(res && res.data.code==0){
                     let voteInfos = res.data.data.voteInfos
                     for(let i = 0;i < voteInfos.length;i++){
                         for(let j = 0;j < this.data.length;j++){

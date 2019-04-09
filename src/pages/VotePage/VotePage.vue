@@ -41,6 +41,7 @@
         <v-comment ref="mychild" v-show="commentShow" :dateId='dateId' :timeStatus='this.$route.params.data?(this.$route.params.data.timeStatus?this.$route.params.data.timeStatus:this.$router.push("/DateList")):this.$router.push("/DateList")' @on-open='open'/>
         <v-notRepeatVote v-if='NotVoteShow' @on-close='closeNotVote'/>
         <v-Loading v-show="loadingShow"/>
+        <v-commentError v-if="commentErrorShow" @on-close='commentErrorShow = flase'/>
         <v-timeOut v-if="tiemOut" @on-close='closeTimeOut'/>
     </div>
 </template>
@@ -52,7 +53,8 @@ import {getCookie} from '@/util/Cookie'
 import VEmojiPicker from 'v-emoji-picker';
 import packData from 'v-emoji-picker/data/emojis.json';
 import Loading from '@/components/Loading';
-import timeOut from '@/components/timeOut'
+import timeOut from '@/components/timeOut';
+import commentError from '@/components/commentError'
 
 export default {
     data(){
@@ -75,6 +77,7 @@ export default {
             emojiShow:false,
             loadingShow:false,//加载中
             tiemOut:false,//超出时间段
+            commentErrorShow:false
         }
     },
     created(){
@@ -85,10 +88,10 @@ export default {
         'v-comment':comment,
         'v-Loading':Loading,
         'v-timeOut':timeOut,
+        'v-commentError':commentError,
         VEmojiPicker
     },
     mounted(){
-        
         document.getElementById("EmojiPicker").style.width='100%'
         document.getElementsByClassName("container-search")[0].style.height=0
         document.getElementById("Emojis").style.backgroundColor="#f0f0f0"
@@ -161,15 +164,13 @@ export default {
                 },
                 {headers:{'Content-Type':'application/json'}})
                 .then(res => {
-                    console.log(res)
-                    if(res.data.code===0){
-                        console.log(res.data.data)
+                    if(res && res.data.code===0){
                         this.vote1NumberPer = res.data.data.vote1NumberPer.toFixed(2)
                         this.vote2NumberPer = res.data.data.vote2NumberPer.toFixed(2)
 
                         this.redCss.height = res.data.data.vote1NumberPer * 100+'%'
                         this.buleCss.height = res.data.data.vote2NumberPer * 100+'%'
-                    }else if(res.data.code===1003){
+                    }else if(res && res.data.code === 1003){
                         this.NotVoteShow = true
                     }
                     this.loadingShow = false
@@ -198,12 +199,16 @@ export default {
                     },
                     {headers:{'Content-Type':'application/json'}})
                     .then(res => {
-                        console.log(res.data)
-                        if(res.data.code===0){
+                        if(res && res.data.code === 0){
                             this.commentText = ''
                             this.emojiShow = false
                             
                             this.$refs.mychild.childClick();
+                            if(!this.commentShow){
+                                this.commentShow = true
+                            }
+                        }else{
+                            this.commentErrorShow = true
                         }
                     })
                     .catch(error => {
