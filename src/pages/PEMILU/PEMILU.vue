@@ -41,7 +41,7 @@
         <!-- 表情插件 -->
         <VEmojiPicker :pack="pack" @select="selectEmoji" :showCategory ="false" v-show='emojiShow'/>
         <!-- 评论列表 -->
-        <v-comment ref="mychild" v-if="commentShow" :dateId='dateId' :timeStatus = '1'/>
+        <v-comment ref="mychild" v-show="commentShow" :dateId='dateId' :timeStatus = '1'/>
         <v-commentError v-if="commentErrorShow" @on-close='commentErrorShow = flase'/>
         <v-Loading v-show="loadingShow"/>
     </div>

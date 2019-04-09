@@ -1,10 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/pages/Home/Home'
-import DateList from '@/pages/DateList/DateList'
-import VotePage from '@/pages/VotePage/VotePage'
-import PEMILU from '@/pages/PEMILU/PEMILU'
-import Rule from '@/pages/Rule/Rule'
 
 Vue.use(Router)
 
@@ -13,27 +8,27 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: ()=> import("@/pages/Home/Home")
     },
     {
       path: '/DateList',
       name: 'DateList',
-      component: DateList
+      component: ()=> import("@/pages/DateList/DateList")
     },
     {
       path: '/VotePage',
       name: 'VotePage',
-      component: VotePage
+      component: ()=> import("@/pages/VotePage/VotePage")
     },
     {
       path: '/PEMILU',
       name: 'PEMILU',
-      component: PEMILU
+      component: ()=> import("@/pages/PEMILU/PEMILU")
     },
     {
       path: '/Rule',
       name: 'Rule',
-      component: Rule
+      component: ()=> import("@/pages/Rule/Rule")
     },
   ]
 })
