@@ -15,13 +15,13 @@
                     <div v-show="this.redCss.height !== '0%'" :style="redCss" class="progress_red">
                         <p>{{vote1NumberPer * 100 + '%'}}</p>
                     </div>
-                    <img @click="select(1)" :src="vote1Img" alt="leftImg">
+                    <img :class="{'gray':this.voteAvatarNum !== 1}" @click="select(1)" :src="vote1Img" alt="leftImg">
                 </div>
                 <div class="right">
                     <div v-show="this.buleCss.height !== '0%'" :style="buleCss" class="progress_blue">
                         <p>{{vote2NumberPer * 100 + '%'}}</p>
                     </div>
-                    <img @click="select(2)" :src="vote2Img" alt="rightImg">
+                    <img :class="{'gray':this.voteAvatarNum !== 2}" @click="select(2)" :src="vote2Img" alt="rightImg">
                 </div>
             </div>
         </div>
@@ -77,7 +77,8 @@ export default {
             emojiShow:false,
             loadingShow:false,//加载中
             tiemOut:false,//超出时间段
-            commentErrorShow:false
+            commentErrorShow:false,
+            voteAvatarNum:0,
         }
     },
     created(){
@@ -92,6 +93,8 @@ export default {
         VEmojiPicker
     },
     mounted(){
+        console.log(this.$route.params.data)
+
         document.getElementById("EmojiPicker").style.width='100%'
         document.getElementsByClassName("container-search")[0].style.height=0
         document.getElementById("Emojis").style.backgroundColor="#f0f0f0"
@@ -100,9 +103,10 @@ export default {
         }
         this.topicAndImg(this.dateId)
         if(this.$route.params.data){
-            this.vote1NumberPer = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer.toFixed(2):0
-            this.vote2NumberPer = this.$route.params.data.vote2NumberPer?this.$route.params.data.vote2NumberPer.toFixed(2):0
+            this.vote1NumberPer = this.$route.params.data.vote1NumberPer?Number(this.$route.params.data.vote1NumberPer).toFixed(2):0
+            this.vote2NumberPer = this.$route.params.data.vote2NumberPer?Number(this.$route.params.data.vote2NumberPer).toFixed(2):0
             this.voteNumber = this.$route.params.data.voteAvatarNum?this.$route.params.data.voteAvatarNum:0
+            this.voteAvatarNum = this.$route.params.data.voteAvatarNum?this.$route.params.data.voteAvatarNum:0
 
             this.redCss.height = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer * 100+'%':'0%'
             this.buleCss.height = this.$route.params.data.vote2NumberPer?this.$route.params.data.vote2NumberPer * 100+'%':'0%'
@@ -160,13 +164,14 @@ export default {
                 {
                     uid:Number(getCookie('uid')),//用户id
                     voteId:Number(this.dateId),//日期id
-                    avatarNum:id//后选人id  
+                    avatarNum:id//后选人id
                 },
                 {headers:{'Content-Type':'application/json'}})
                 .then(res => {
                     if(res && res.data.code===0){
-                        this.vote1NumberPer = res.data.data.vote1NumberPer.toFixed(2)
-                        this.vote2NumberPer = res.data.data.vote2NumberPer.toFixed(2)
+                        this.voteAvatarNum = id
+                        this.vote1NumberPer = Number(res.data.data.vote1NumberPer).toFixed(2)
+                        this.vote2NumberPer = Number(res.data.data.vote2NumberPer).toFixed(2)
 
                         this.redCss.height = res.data.data.vote1NumberPer * 100+'%'
                         this.buleCss.height = res.data.data.vote2NumberPer * 100+'%'
@@ -177,6 +182,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error)
+                    this.loadingShow = false
                 })
             }else{
                 this.tiemOut = true
@@ -236,6 +242,7 @@ export default {
                     this.vote2Img = require('../../assets/img_polingpilpres_ui_prabowo@2x.png')
                     document.getElementsByTagName("title")[0].innerText = 'Polling Hari 02';
                     this.dateTime = '11 April 2019'
+                    break;
                 case 3:
                     this.topic = 'Tugas Wapres adalah menjalankan roda koordinasi dan komunikasi antara lembaga-lembaga di pemerintahan. Menurutmu, Cawapres Mana Yang Lebih Bisa Menjalankan Tugas Tersebut?'
                     this.vote1Img = require('../../assets/img_polingpilpres_ui_amin@2x.png')
@@ -356,6 +363,7 @@ export default {
     bottom:-0.50rem;
     left: 0;
 }
+
 .progress_red{
     width: 0.5rem;
     background-color: #af1919;
@@ -412,5 +420,17 @@ input{
     padding-right:0.1rem; 
     outline:none;
     float: left;
+}
+
+/* 图片颜色变为黑白色 */
+.gray { 
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    
+    filter: grayscale(100%);
+	
+    filter: gray;
 }
 </style>

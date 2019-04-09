@@ -122,7 +122,7 @@ export default {
             {id:uid},//用户id
             {headers:{'Content-Type':'application/json'}})
             .then(res => {
-                if(res && res.data.code==0){
+                if(res && res.data.code === 0){
                     let voteInfos = res.data.data.voteInfos
                     for(let i = 0;i < voteInfos.length;i++){
                         for(let j = 0;j < this.data.length;j++){
@@ -131,7 +131,7 @@ export default {
                                 if(voteInfos[i].hasVote){
                                     this.data[j].voteStatus = 1
                                 }else{
-                                    this.data[j].voteStatus= 0 
+                                    this.data[j].voteStatus = 0 
                                 }
                                 //同步时间状态
                                 this.data[j].timeStatus = voteInfos[i].canSHow 
@@ -143,10 +143,11 @@ export default {
                         }
                     }
                 }
-                this.loadingShow = false
+                // this.loadingShow = false
             })
             .catch(error => {
                 console.log(error)
+                this.loadingShow = false
             })
         }
     }

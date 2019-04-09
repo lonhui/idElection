@@ -43,9 +43,6 @@ export default {
 
         }
     },
-    mounted(){
-        console.log(this.data)
-    },
     methods:{
         gotoVote(id){
             setCookie('dateId',this.data.id,1)

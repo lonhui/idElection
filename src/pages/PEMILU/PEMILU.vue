@@ -63,7 +63,8 @@ export default {
              pack: packData,
             emojiShow:false,
             loadingShow:false,
-            commentErrorShow:false
+            commentErrorShow:false,
+            dateId:null,
         }
     },
     created(){
@@ -140,6 +141,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error.data)
+                    this.loadingShow = false
                 })
             }
         },

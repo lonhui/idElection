@@ -145,6 +145,7 @@ export default {
             })
             .catch(error => {
                 console.log(error)
+                this.loagdingShow = false
             })
         },
         getCommentList(){
@@ -172,6 +173,7 @@ export default {
             })
             .catch(error => {
                 console.log(error)
+                this.loagdingShow = false
             })
         },
     }
