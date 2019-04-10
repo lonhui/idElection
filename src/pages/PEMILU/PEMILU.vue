@@ -127,7 +127,7 @@ export default {
                 content:this.commentText
                 },
                 {headers:{'Content-Type':'application/json'}})
-                .then(res => {
+                .then((res) => {
                     if(res && res.data.code === 0){
                         this.commentText = ''
                         this.emojiShow = false
@@ -140,7 +140,7 @@ export default {
                     }
                     this.loadingShow = false
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error.data)
                     this.loadingShow = false
                 })

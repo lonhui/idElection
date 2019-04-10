@@ -73,7 +73,7 @@ export default {
                 likeComment:likeComment
                 },
                 {headers:{'Content-Type':'application/json'}})
-                .then(res => {
+                .then((res) => {
                     if(res && res.data.code === 0){
                     this.commentList.map(item => {
                         if(item.id === commentId){
@@ -111,7 +111,7 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error)
                 })
             }else{
@@ -128,7 +128,7 @@ export default {
               pageSize:7
             },
             {headers:{'Content-Type':'application/json'}})
-            .then(res => {
+            .then((res) => {
                 if(res.data.code === 0){
                     if(res.data.data.commentList.length<7){
                         this.moreStatus = false
@@ -144,7 +144,7 @@ export default {
                 console.log(res)
                 this.loagdingShow = false
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error)
                 this.loagdingShow = false
             })
@@ -161,7 +161,7 @@ export default {
               pageSize:7
             },
             {headers:{'Content-Type':'application/json'}})
-            .then(res => {
+            .then((res) => {
                 if(res.data.code === 0){
                     res.data.data.commentList.map((item)=>{
                         let date = new Date(item.createTime)+''
@@ -171,10 +171,9 @@ export default {
                     this.commentList = res.data.data.commentList
                     this.count = res.data.data.count
                 }
-                console.log(res)
                 this.loagdingShow = false
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error)
                 this.loagdingShow = false
             })
@@ -187,10 +186,6 @@ export default {
             //可滚动容器超出当前窗口显示范围的高度
             let scrollTop = document.body.scrollTop;
 
-            
-            console.log(innerHeight)
-            console.log(outerHeight)
-            console.log(scrollTop)
             if (innerHeight < (outerHeight + scrollTop + 10)) {
                if(this.moreStatus){
                    this.more()

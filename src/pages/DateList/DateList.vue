@@ -8,6 +8,7 @@
             </div>
         </div>
         <v-Loading v-show="loadingShow"/>
+        <v-InternetError v-show="InternetErrorShow" @on-close="InternetErrorShow = false"/>
     </div>
 </template>
 
@@ -15,11 +16,13 @@
 import Date from './component/Date'
 import {getCookie} from '@/util/Cookie'
 import Loading from '@/components/Loading'
+import InternetError from '@/components/InternetError'
 
 export default {
     data(){
         return{
-            loadingShow:false,
+            loadingShow:true,
+            InternetErrorShow:false,
             data:[
                 {
                     id:1,
@@ -107,6 +110,7 @@ export default {
     components:{
         'v-date':Date,
         'v-Loading':Loading,
+        'v-InternetError':InternetError
     },
     mounted(){
         if(getCookie('uid')){
@@ -121,7 +125,7 @@ export default {
             this.$axios.post(process.env.API_ROOT+'/vote/votes',
             {id:uid},//用户id
             {headers:{'Content-Type':'application/json'}})
-            .then(res => {
+            .then((res) => {
                 if(res && res.data.code === 0){
                     let voteInfos = res.data.data.voteInfos
                     for(let i = 0;i < voteInfos.length;i++){
@@ -145,8 +149,9 @@ export default {
                 }
                 this.loadingShow = false
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error)
+                this.InternetErrorShow = true
                 this.loadingShow = false
             })
         }
@@ -158,7 +163,6 @@ export default {
 #DateList{
     width: 100%;
     background-color: #fff;
-    
 }
 .header{
     width: 100%;
@@ -177,5 +181,4 @@ export default {
     position: absolute;
     bottom:-2.3rem
 }
-
 </style>

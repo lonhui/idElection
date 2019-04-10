@@ -57,7 +57,7 @@ export default {
             this.$axios.post(process.env.API_ROOT+'/vote/votes',
             {id:this.userId},//用户id
             {headers:{'Content-Type':'application/json'}})
-            .then(res => {
+            .then((res) => {
                 console.log(res)
                 if(res.data.code==0){
                     this.$router.push({
@@ -66,17 +66,17 @@ export default {
                     })
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error)
             })
         },
         // 获取日期和当天候选人图片
         getInfo(){
             this.$axios.get(process.env.API_ROOT+'/vote/todayVote')
-            .then(res => {
+            .then((res) => {
                 console.log(res)
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error)
             })
         },

@@ -13,13 +13,13 @@
             <div class="vote_box">
                 <div class="left">
                     <div v-show="this.redCss.height !== '0%'" :style="redCss" class="progress_red">
-                        <p>{{vote1NumberPer * 100 + '%'}}</p>
+                        <p>{{vote1NumberPer + '%'}}</p>
                     </div>
                     <img :class="{'gray':this.voteAvatarNum !== 1}" @click="select(1)" :src="vote1Img" alt="leftImg">
                 </div>
                 <div class="right">
                     <div v-show="this.buleCss.height !== '0%'" :style="buleCss" class="progress_blue">
-                        <p>{{vote2NumberPer * 100 + '%'}}</p>
+                        <p>{{vote2NumberPer + '%'}}</p>
                     </div>
                     <img :class="{'gray':this.voteAvatarNum !== 2}" @click="select(2)" :src="vote2Img" alt="rightImg">
                 </div>
@@ -103,13 +103,13 @@ export default {
         }
         this.topicAndImg(this.dateId)
         if(this.$route.params.data){
-            this.vote1NumberPer = this.$route.params.data.vote1NumberPer?Number(this.$route.params.data.vote1NumberPer).toFixed(2):0
-            this.vote2NumberPer = this.$route.params.data.vote2NumberPer?Number(this.$route.params.data.vote2NumberPer).toFixed(2):0
+            this.vote1NumberPer = this.$route.params.data.vote1NumberPer?(this.$route.params.data.vote1NumberPer+'').substring(0,2):0
+            this.vote2NumberPer = this.$route.params.data.vote2NumberPer?(this.$route.params.data.vote2NumberPer+'').substring(0,2):0
             this.voteNumber = this.$route.params.data.voteAvatarNum?this.$route.params.data.voteAvatarNum:0
             this.voteAvatarNum = this.$route.params.data.voteAvatarNum?this.$route.params.data.voteAvatarNum:0
 
-            this.redCss.height = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer * 100+'%':'0%'
-            this.buleCss.height = this.$route.params.data.vote2NumberPer?this.$route.params.data.vote2NumberPer * 100+'%':'0%'
+            this.redCss.height = this.$route.params.data.vote1NumberPer?this.$route.params.data.vote1NumberPer +'%':'0%'
+            this.buleCss.height = this.$route.params.data.vote2NumberPer?this.$route.params.data.vote2NumberPer +'%':'0%'
         }else{  
             this.$router.push('/DateList')
         }
@@ -167,7 +167,7 @@ export default {
                     avatarNum:id//后选人id
                 },
                 {headers:{'Content-Type':'application/json'}})
-                .then(res => {
+                .then((res) => {
                     if(res && res.data.code===0){
                         this.voteAvatarNum = id
                         this.vote1NumberPer = Number(res.data.data.vote1NumberPer).toFixed(2)
@@ -180,7 +180,7 @@ export default {
                     }
                     this.loadingShow = false
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error)
                     this.loadingShow = false
                 })
@@ -204,7 +204,7 @@ export default {
                         content:this.commentText
                     },
                     {headers:{'Content-Type':'application/json'}})
-                    .then(res => {
+                    .then((res) => {
                         if(res && res.data.code === 0){
                             this.commentText = ''
                             this.emojiShow = false
@@ -217,7 +217,7 @@ export default {
                             this.commentErrorShow = true
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.log(error.data)
                     })
                 }else{
