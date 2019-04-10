@@ -32,17 +32,17 @@
                 <img class="expression" src="../../assets/img_smiley@3x.png" @click="expression" alt="表情">
                 <input type="text" placeholder='Apa pendapat kamu?' v-on:keyup.enter='doComment' v-model="commentText" @focus='getFocus'>
                 <img class="share" src="../../assets/ico_share_on@3x.png" @click="share" alt="分享">
-                <img class="commentList" src="../../assets/ic_commentbar@3x.png" @click="commentList" alt="评论">
+                <img class="commentList" src="../../assets/ico_send@3x.png" @click="doComment" alt="评论">
             </div>
         </div>
         <!-- 表情插件 -->
         <VEmojiPicker :pack="pack" @select="selectEmoji" :showCategory ="false" v-show='emojiShow'/>
         <!-- 评论列表 -->
-        <v-comment ref="mychild" v-show="commentShow" :dateId='dateId' :timeStatus='this.$route.params.data?(this.$route.params.data.timeStatus?this.$route.params.data.timeStatus:this.$router.push("/DateList")):this.$router.push("/DateList")' @on-open='open'/>
-        <v-notRepeatVote v-if='NotVoteShow' @on-close='closeNotVote'/>
+        <v-comment ref="mychild" :dateId='dateId' :timeStatus='this.$route.params.data?(this.$route.params.data.timeStatus?this.$route.params.data.timeStatus:this.$router.push("/DateList")):this.$router.push("/DateList")' @on-open='open'/>
+        <v-notRepeatVote v-show='NotVoteShow' @on-close='closeNotVote'/>
         <v-Loading v-show="loadingShow"/>
-        <v-commentError v-if="commentErrorShow" @on-close='commentErrorShow = flase'/>
-        <v-timeOut v-if="tiemOut" @on-close='closeTimeOut'/>
+        <v-commentError v-show="commentErrorShow" @on-close='commentErrorShow = flase'/>
+        <v-timeOut v-show="tiemOut" @on-close='closeTimeOut'/>
     </div>
 </template>
 
@@ -93,7 +93,7 @@ export default {
         VEmojiPicker
     },
     mounted(){
-        console.log(this.$route.params.data)
+        window.scrollTo(0,0)
 
         document.getElementById("EmojiPicker").style.width='100%'
         document.getElementsByClassName("container-search")[0].style.height=0
@@ -194,7 +194,7 @@ export default {
         },
         // 评论  回车键触发
         doComment(){
-            
+            document.activeElement.blur();
             if(this.commentText && this.commentText.length>0 && this.commentText != ''){
                 if(this.$route.params.data.timeStatus === 1){
                      this.$axios.post(process.env.API_ROOT+'/vote/doComment',
@@ -326,7 +326,7 @@ export default {
 }
 /* ************ */
 .vote {
-    height: 4.37rem;
+    height: 2.8rem;
     background:url('../../assets/vote_bg.png');
     background-size:100% 100%;
     background-repeat:no-repeat;
@@ -339,8 +339,8 @@ export default {
 .vote_box{
     width: 90%;
     margin: 0 auto;
-    height: 2.0rem;
-    margin-top: 0.6rem;
+    height: 1.5rem;
+    margin-top: 0.4rem;
 }
 .vote_box .left{
     width: 1.46rem;
@@ -410,6 +410,10 @@ export default {
 .expression,.share,.commentList{
     width: 0.3rem;
     height: 0.3rem;
+}
+.share{
+     width: 0.25rem;
+    height: 0.25rem;
 }
 input{
     height: 0.28rem;

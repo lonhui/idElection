@@ -34,14 +34,14 @@
                 <img class="expression" src="../../assets/img_smiley@3x.png" @click="expression" alt="表情">
                 <input type="text" placeholder='Apa pendapat kamu?' v-on:keyup.enter='doComment' v-model="commentText" @focus='getFocus'>
                 <img class="share" src="../../assets/ico_share_on@3x.png" @click="share" alt="分享">
-                <img class="commentList" src="../../assets/ic_commentbar@3x.png" @click="commentList" alt="评论">
+                <img class="commentList" src="../../assets/ico_send@3x.png" @click="doComment" alt="评论">
             </div>
         </div>
 
         <!-- 表情插件 -->
         <VEmojiPicker :pack="pack" @select="selectEmoji" :showCategory ="false" v-show='emojiShow'/>
         <!-- 评论列表 -->
-        <v-comment ref="mychild" v-show="commentShow" :dateId='dateId' :timeStatus = '1'/>
+        <v-comment ref="mychild" :dateId='dateId' :timeStatus = '1'/>
         <v-commentError v-if="commentErrorShow" @on-close='commentErrorShow = flase'/>
         <v-Loading v-show="loadingShow"/>
     </div>
@@ -69,7 +69,6 @@ export default {
     },
     created(){
         window.shareSucceed = this.shareSucceed;
-        
     },
     mounted(){
         document.getElementById("EmojiPicker").style.width='100%'
@@ -118,6 +117,7 @@ export default {
         // 评论  回车键触发
         doComment(){
             this.loadingShow = true
+            document.activeElement.blur();
             if(this.commentText && this.commentText.length>0 && this.commentText != ''){
                  this.$axios.post(process.env.API_ROOT+'/vote/doComment',
                 {
@@ -233,11 +233,13 @@ export default {
     width: 0.3rem;
     height: 0.3rem;
 }
+.share{
+     width: 0.25rem;
+    height: 0.25rem;
+}
 input{
     height: 0.28rem;
     width: 2rem;
-    margin-top: 0.08rem;
-    margin-left: 0.1rem;
     border-radius: 0.14rem;
     background-color: #f2f2f2;
     padding-left: 0.1rem;

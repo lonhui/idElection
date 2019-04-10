@@ -14,7 +14,6 @@
                     </div>
                     <div class="info">
                        <span>{{item.commentTime}}</span>
-                       <!-- <span :style="{color:'#6fb52d',margin:'0 0 0 0.1rem'}">· 12 Balasan</span> -->
                        <div class="awesome">
                            <!-- 赞 -->
                            <img :src="item.likeComment===1?awesome_y:awesome_n" @click="awesome(item.id,1)" alt="awesome">
@@ -26,15 +25,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="loading" v-if="loagdingShow">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-        <div class="more" @click="more">Tampilkan Lebih Banyak</div>
+        </div>        
+        <div class="more" v-show="!moreStatus">Tidak ada pembaharuan</div>
 
     </div>
 </template>
@@ -46,7 +38,7 @@ export default {
     props:['dateId','timeStatus'],
     data(){
         return{
-            loagdingShow:false,
+            loagdingShow:true,
             commentList:[],
             pageNo:1,
             count:0,
@@ -54,16 +46,22 @@ export default {
             awesome_n:require('../assets/awesome_n.png'),
             Step_on_y:require('../assets/Step_on_y.png'),
             Step_on_n:require('../assets/Step_on_n.png'),
+
+            innerHeight:1,
+            outerHeight:0,
+            scrollTop:0,
+            moreStatus:true
         }
     },
     mounted(){
         this.getCommentList()
+        window.addEventListener('scroll', this.handleScroll)
     },
     methods:{
         childClick() {
-            if(this.pageNo === 1 ){
+            // if(this.pageNo === 1 ){
                 this.getCommentList()
-            }
+            // }
         },
         // 点赞、踩（评论id,赞或踩）赞1，踩0
         awesome(commentId,likeComment){
@@ -132,6 +130,9 @@ export default {
             {headers:{'Content-Type':'application/json'}})
             .then(res => {
                 if(res.data.code === 0){
+                    if(res.data.data.commentList.length<7){
+                        this.moreStatus = false
+                    }
                     res.data.data.commentList.map((item)=>{
                         let date = new Date(item.createTime)+''
                         let dateArr = date.split(' ')
@@ -150,6 +151,8 @@ export default {
         },
         getCommentList(){
             this.loagdingShow = true
+            this.pageNo = 1
+            this.moreStatus = true
             this.$axios.post(process.env.API_ROOT+'/vote/voteComments',
             {
               uid:Number(getCookie('uid')),//用户id
@@ -176,6 +179,29 @@ export default {
                 this.loagdingShow = false
             })
         },
+        handleScroll() {
+            //可滚动容器的高度
+            let innerHeight = document.querySelector('#app').clientHeight;
+            //屏幕尺寸高度
+            let outerHeight = document.documentElement.clientHeight;
+            //可滚动容器超出当前窗口显示范围的高度
+            let scrollTop = document.body.scrollTop;
+
+            
+            console.log(innerHeight)
+            console.log(outerHeight)
+            console.log(scrollTop)
+            if (innerHeight < (outerHeight + scrollTop + 10)) {
+               if(this.moreStatus){
+                   this.more()
+               } 
+            }
+        }
+
+    },
+    // 取消监听
+    beforeDestroy(){
+        window.removeEventListener('scroll', this.handleScroll)
     }
 }
 </script>
@@ -242,52 +268,13 @@ export default {
 }
 /* ********** */
 .more{
-    border-top: 0.005rem #f2f2f2 solid;
-    border-bottom: 0.005rem #f2f2f2 solid;
     font-size: 0.12rem;
-    color: #6fb52d;
+    color: rgba(0, 0, 0, 0.3);
     text-align: center;
     line-height: 0.4rem;
     margin-top: 0.1rem;
 }
 .text_content{
     word-break:break-all;
-}
-/* ************* */
-.loading{
-    width: 0.8rem;
-    height: 1.2rem;
-    margin: 0 auto;
-}
-.loading span{
-    display: inline-block;
-    width: 0.06rem;
-    height: 100%;
-    border-radius: 0.03rem;
-    background: lightgreen;
-    -webkit-animation: load 1s ease infinite;
-}
-@-webkit-keyframes load{
-    0%,100%{
-        height: 0.2rem;
-        background: lightgreen;
-    }
-    50%{
-        height: 0.60rem;
-        margin: -0.15rem 0;
-        background: lightblue;
-    }
-}
-.loading span:nth-child(2){
-    -webkit-animation-delay:0.2s;
-}
-.loading span:nth-child(3){
-    -webkit-animation-delay:0.4s;
-}
-.loading span:nth-child(4){
-    -webkit-animation-delay:0.6s;
-}
-.loading span:nth-child(5){
-    -webkit-animation-delay:0.8s;
 }
 </style>

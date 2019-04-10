@@ -131,7 +131,7 @@ export default {
                                 if(voteInfos[i].hasVote){
                                     this.data[j].voteStatus = 1
                                 }else{
-                                    this.data[j].voteStatus = 0 
+                                    this.data[j].voteStatus = 0
                                 }
                                 //同步时间状态
                                 this.data[j].timeStatus = voteInfos[i].canSHow 
@@ -143,7 +143,7 @@ export default {
                         }
                     }
                 }
-                // this.loadingShow = false
+                this.loadingShow = false
             })
             .catch(error => {
                 console.log(error)
