@@ -31,7 +31,8 @@
         <!-- 表情，评论，分享，展开评论列表 -->
         <div class="footer">
             <div class="footer_centent">
-                <img class="expression" src="../../assets/img_smiley@3x.png" @click="expression" alt="表情">
+                <!-- <img class="expression" src="../../assets/img_smiley@3x.png" @click="expression" alt="表情"> -->
+                <img class="expression" src="../../assets/add_photo@3x.png" @click="expression" alt="表情">
                 <input type="text" placeholder='Apa pendapat kamu?' v-on:keyup.enter='doComment' v-model="commentText" @focus='getFocus'>
                 <img class="share" src="../../assets/ico_share_on@3x.png" @click="share" alt="分享">
                 <img class="commentList" src="../../assets/ico_send@3x.png" @click="doComment" alt="评论">

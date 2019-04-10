@@ -5,7 +5,7 @@
         <div class="center" v-for="item in commentList" :key="item.id">
             <div class="comment">
                 <div class="avatar">
-                    <img :src="item.imageUrl?item.imageUrl:'../assets/member_img_avatar@2x.png'" alt="avatar">
+                    <img :src="item.imageUrl?item.imageUrl:avatar">
                 </div>
                 <div class="comment_text">
                     <div class="text">
@@ -16,10 +16,10 @@
                        <span>{{item.commentTime}}</span>
                        <div class="awesome">
                            <!-- 赞 -->
-                           <img :src="item.likeComment===1?awesome_y:awesome_n" @click="awesome(item.id,1)" alt="awesome">
+                           <img :src="item.likeComment===1?awesome_y:awesome_n" @click="awesome(item.id,1)">
                            <span>{{item.likeCount}}</span>
                            <!-- 踩 -->
-                           <img :src="item.likeComment===0?Step_on_y:Step_on_n" @click="awesome(item.id,0)" :style="{margin:'0 0 0 0.15rem'}" alt="stepOn">
+                           <img :src="item.likeComment===0?Step_on_y:Step_on_n" @click="awesome(item.id,0)" :style="{margin:'0 0 0 0.15rem'}">
                            <span>{{item.dislikeCount}}</span>
                        </div>
                     </div>
@@ -46,7 +46,7 @@ export default {
             awesome_n:require('../assets/awesome_n.png'),
             Step_on_y:require('../assets/Step_on_y.png'),
             Step_on_n:require('../assets/Step_on_n.png'),
-
+            avatar:require('../assets/member_img_avatar@2x.png'),
             innerHeight:1,
             outerHeight:0,
             scrollTop:0,
