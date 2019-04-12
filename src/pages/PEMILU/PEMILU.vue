@@ -15,7 +15,7 @@
                     <img src="../../assets/img_kelingking@3x.png" alt="hand">
                 </div>
                 <div class="right">
-                    Setelah ke TPS, share bukti kamu sudah memilih dengan cara foto jarimu dan posting di kolom komen di bawah ini dengan menceritakan suasana TPS di tempatmu.
+                    <p>Setelah ke TPS, share bukti kamu sudah memilih dengan cara  <span>menceritakan pengalaman memilihmu dan suasana TPS di tempatmu.</span></p>
                 </div>
             </div>
             <div class="giftBox">
@@ -193,10 +193,12 @@ export default {
     font-size: 0.12rem;
     color: #000;
     line-height: 0.21rem;
-    float: right;
     display: flex;
     justify-content:center;
     align-items:Center;
+}
+.right span{
+    font-weight: 600;
 }
 .giftBox .right{
     font-size: 0.15rem;

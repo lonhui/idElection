@@ -170,11 +170,11 @@ export default {
                 .then((res) => {
                     if(res && res.data.code===0){
                         this.voteAvatarNum = id
-                        this.vote1NumberPer = Number(res.data.data.vote1NumberPer).toFixed(2)
-                        this.vote2NumberPer = Number(res.data.data.vote2NumberPer).toFixed(2)
+                        this.vote1NumberPer = (res.data.data.vote1NumberPer+'').substring(0,2)
+                        this.vote2NumberPer = (res.data.data.vote2NumberPer+'').substring(0,2)
 
-                        this.redCss.height = res.data.data.vote1NumberPer * 100+'%'
-                        this.buleCss.height = res.data.data.vote2NumberPer * 100+'%'
+                        this.redCss.height = res.data.data.vote1NumberPer +'%'
+                        this.buleCss.height = res.data.data.vote2NumberPer +'%'
                     }else if(res && res.data.code === 1003){
                         this.NotVoteShow = true
                     }
